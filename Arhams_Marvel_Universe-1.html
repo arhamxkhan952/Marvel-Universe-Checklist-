@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101018">
+<title>ARHAM'S MARVEL UNIVERSE</title>
+<style>
+:root{color-scheme:dark;--bg:#101018;--panel:#1b1b27;--line:#383847;--red:#e62429;--muted:#aaaabd;--green:#36c98b}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#3b1724 0,#17131d 38%,#0d0d14 78%);color:#fff;font:16px system-ui,-apple-system,Segoe UI,sans-serif}
+main{max-width:760px;margin:auto;padding:22px 15px 48px}
+.hero{position:relative;overflow:hidden;padding:27px 21px;border:1px solid #5a303d;border-radius:23px;background:linear-gradient(135deg,#34151fdd,#191923f2);box-shadow:0 15px 42px #0007}
+.hero:after{content:"A";position:absolute;right:12px;top:-45px;font-size:210px;font-weight:1000;line-height:1;color:#ffffff0a;pointer-events:none}
+.kicker{color:#ff8589;font-weight:850;letter-spacing:3px;font-size:11px}.hero h1{position:relative;margin:10px 0 5px;font-size:clamp(30px,8vw,48px);line-height:.98;letter-spacing:-1.5px}.hero h1 span{color:#ff555b}.tagline{color:#d1c4cc;margin:12px 0 21px;max-width:460px}
+.stats{display:flex;justify-content:space-between;align-items:end;gap:10px}.count{font-size:31px;font-weight:900}.small{color:var(--muted);font-size:12px}.track{height:10px;background:#393947;border-radius:99px;overflow:hidden;margin-top:10px}.fill{height:100%;width:0;background:linear-gradient(90deg,#e62429,#ff8589);transition:width .2s}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:17px}button{background:#30303e;color:#fff;border:1px solid #48485a;border-radius:11px;padding:9px 12px;font-weight:700;cursor:pointer}button.primary{background:var(--red);border-color:var(--red)}
+.intro{margin:17px 3px 12px;color:#d0cfda;font-size:14px;line-height:1.5}.section-title{font-size:20px;font-weight:850;margin:22px 3px 10px}.phase{margin-top:14px;border:1px solid var(--line);background:#181822;border-radius:17px;overflow:hidden}.phase h2{font-size:16px;margin:0;padding:14px 15px;background:linear-gradient(90deg,#28202c,#222230)}.movie{display:flex;align-items:center;gap:12px;padding:12px 15px;border-top:1px solid #30303b;cursor:pointer}.movie input{width:19px;height:19px;accent-color:var(--green);flex:none}.movie span{line-height:1.35}.movie small{display:block;color:var(--muted);font-size:11px;margin-top:3px}.movie:has(input:checked) span{text-decoration:line-through;color:#9b9bab}
+.footer{text-align:center;color:#9292a5;font-size:12px;margin-top:25px}.footer strong{color:#ff777b;letter-spacing:2px}
+@media print{body{background:#fff;color:#111}.hero,.phase{background:#fff;color:#111;border-color:#aaa}.intro,.small,.movie small{color:#444}.actions{display:none}}
+</style>
+</head>
+<body><main>
+<header class="hero">
+<div class="kicker">YOUR PERSONAL MARVEL WATCHLIST</div>
+<h1>ARHAM'S<br><span>MARVEL</span> UNIVERSE</h1>
+<p class="tagline">Welcome, Arham. Your Marvel journey starts here! Track every movie, tick off the adventures, and watch your progress grow.</p>
+<div class="stats"><div><div class="count" id="count">4 / 40</div><div class="small">movies completed</div></div><div class="small" id="percent">10% complete</div></div>
+<div class="track"><div class="fill" id="fill"></div></div>
+<div class="actions"><button class="primary" onclick="window.print()">Print checklist</button><button onclick="resetList()">Reset progress</button></div>
+</header>
+<p class="intro">☑ Your Spider-Man MCU movies are already checked. Tap the box beside a movie when you watch it. Your progress is saved in this browser on this device.</p>
+<div class="section-title">THE MCU MOVIE CHECKLIST</div>
+<div id="list"></div>
+<footer class="footer"><strong>ARHAM'S MARVEL UNIVERSE</strong><br>One movie at a time. One universe to explore. ✦</footer>
+</main>
+<script>
+const phases=[
+["PHASE 1 — THE BEGINNING",[
+["Iron Man","2008"],["The Incredible Hulk","2008"],["Iron Man 2","2010"],["Thor","2011"],["Captain America: The First Avenger","2011"],["The Avengers","2012"]]],
+["PHASE 2",[
+["Iron Man 3","2013"],["Thor: The Dark World","2013"],["Captain America: The Winter Soldier","2014"],["Guardians of the Galaxy","2014"],["Avengers: Age of Ultron","2015"],["Ant-Man","2015"]]],
+["PHASE 3",[
+["Captain America: Civil War","2016"],["Doctor Strange","2016"],["Guardians of the Galaxy Vol. 2","2017"],["Spider-Man: Homecoming","2017"],["Thor: Ragnarok","2017"],["Black Panther","2018"],["Avengers: Infinity War","2018"],["Ant-Man and the Wasp","2018"],["Captain Marvel","2019"],["Avengers: Endgame","2019"],["Spider-Man: Far From Home","2019"]]],
+["PHASE 4",[
+["Black Widow","2021"],["Shang-Chi and the Legend of the Ten Rings","2021"],["Eternals","2021"],["Spider-Man: No Way Home","2021"],["Doctor Strange in the Multiverse of Madness","2022"],["Thor: Love and Thunder","2022"],["Black Panther: Wakanda Forever","2022"]]],
+["PHASE 5",[
+["Ant-Man and the Wasp: Quantumania","2023"],["Guardians of the Galaxy Vol. 3","2023"],["The Marvels","2023"],["Deadpool & Wolverine","2024"],["Captain America: Brave New World","2025"],["Thunderbolts*","2025"]]],
+["PHASE 6",[
+["The Fantastic Four: First Steps","2025"],["Spider-Man: Brand New Day","2026"],["Avengers: Doomsday","2026 — upcoming"],["Avengers: Secret Wars","2027 — upcoming"]]]
+];
+const storageKey="arhamMarvelTracker_v1";
+const initial=["Spider-Man: Homecoming","Spider-Man: Far From Home","Spider-Man: No Way Home","Spider-Man: Brand New Day"];
+let watched;
+try{watched=JSON.parse(localStorage.getItem(storageKey))||initial.slice()}catch(e){watched=initial.slice()}
+const all=phases.flatMap(p=>p[1]);
+const list=document.getElementById("list");
+phases.forEach(([title,movies])=>{
+ const section=document.createElement("section");section.className="phase";
+ const h=document.createElement("h2");h.textContent=title;section.appendChild(h);
+ movies.forEach(([name,year])=>{
+  const label=document.createElement("label");label.className="movie";
+  const input=document.createElement("input");input.type="checkbox";input.checked=watched.includes(name);
+  input.addEventListener("change",()=>{watched=input.checked?[...watched,name]:watched.filter(x=>x!==name);save();});
+  const span=document.createElement("span");span.textContent=name;
+  const small=document.createElement("small");small.textContent=year;span.appendChild(small);
+  label.append(input,span);section.appendChild(label);
+ });list.appendChild(section);
+});
+function save(){try{localStorage.setItem(storageKey,JSON.stringify(watched))}catch(e){}update()}
+function update(){const n=all.filter(([name])=>watched.includes(name)).length;const pct=Math.round(n/all.length*100);document.getElementById("count").textContent=n+" / "+all.length;document.getElementById("percent").textContent=pct+"% complete";document.getElementById("fill").style.width=pct+"%";}
+function resetList(){if(confirm("Reset all ticks and keep your Spider-Man MCU movies checked?")){watched=initial.slice();save();document.querySelectorAll(".movie input").forEach((el,i)=>{el.checked=watched.includes(all[i][0])})}}
+update();
+</script></body></html>
